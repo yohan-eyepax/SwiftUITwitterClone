@@ -58,8 +58,6 @@ extension ContentView{
                 .offset(x: showMenu ? 0 : -300, y: 0)
                 .background(showMenu ? .white : .clear )
         }
-        .navigationTitle("Home")
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarLeading){
                 if let user = viewModel.currentUser{

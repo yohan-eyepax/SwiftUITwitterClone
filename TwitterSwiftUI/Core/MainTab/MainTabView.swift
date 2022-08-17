@@ -22,6 +22,7 @@ struct MainTabView: View {
                     Image(systemName: "house")
                 }
                 .tag(0)
+                
             
             // Explore View
             ExploreView()
@@ -47,11 +48,29 @@ struct MainTabView: View {
             MessagesView()
                 .onTapGesture {
                     self.selectedIndex = 3
+                    
                 }
                 .tabItem{
                     Image(systemName: "envelope")
                 }
                 .tag(3)
+        }
+        .navigationBarTitle(getTitle())
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    func getTitle() -> String{
+        switch(selectedIndex){
+        case 0:
+            return "Home"
+        case 1:
+            return "Explore"
+        case 2:
+            return "Notifications"
+        case 3:
+            return "Message"
+        default:
+            return "Home"
         }
     }
 }
