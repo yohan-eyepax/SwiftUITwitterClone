@@ -10,6 +10,7 @@ import Foundation
 class ExploreViewModel: ObservableObject{
     @Published var users = [User]()
     @Published var searchText = ""
+    @Published var isLoading : Bool = false
     
     var searchableUsers : [User]{
         if searchText.isEmpty{
@@ -30,8 +31,10 @@ class ExploreViewModel: ObservableObject{
     }
     
     func fetchUser(){
+        isLoading = true
         service.fetchUsers { users in
             self.users = users
+            self.isLoading = false
             //print("DEBUG: users \(users)")
         }
     }

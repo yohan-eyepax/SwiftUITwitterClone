@@ -9,10 +9,12 @@ import Foundation
 
 class UploadTweetViewModel : ObservableObject{
     @Published var didUploadTweet = false
+    @Published var isLoading: Bool = false
     let service = TweetService()
     
     
     func uploadTweet(withCaption caption: String){
+        isLoading = true
         service.uploadTweet(caption: caption) { success in
             if success {
                 // dismiss screen
@@ -20,6 +22,7 @@ class UploadTweetViewModel : ObservableObject{
             }else{
                 // show error message to user
             }
+            self.isLoading = false
         }
     }
 }

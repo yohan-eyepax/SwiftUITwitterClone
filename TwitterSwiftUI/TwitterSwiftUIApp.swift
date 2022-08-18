@@ -20,7 +20,6 @@ struct TwitterSwiftUIApp: App {
         WindowGroup {
             NavigationView{
                 ContentView()
-                //ProfilePhotoSelectorView()
             }
             .environmentObject(viewModel)
         }

@@ -67,6 +67,11 @@ struct RegistrationView: View {
             }
         }
         .ignoresSafeArea()
+        .overlay {
+            if viewModel.isLoading{
+                ActivityIndicator()
+            }
+        }
     }
 }
 
