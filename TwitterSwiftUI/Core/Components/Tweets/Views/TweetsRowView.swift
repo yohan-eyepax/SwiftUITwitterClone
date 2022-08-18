@@ -78,7 +78,7 @@ struct TweetsRowView: View {
                 Spacer()
                 
                 Button{
-                    viewModel.likeTweet()
+                    viewModel.tweet.didLike ?? false ? viewModel.unlikeTweet() : viewModel.likeTweet()
                 } label: {
                     Image(systemName: viewModel.tweet.didLike ?? false ? "heart.fill": "heart")
                         .font(.subheadline)

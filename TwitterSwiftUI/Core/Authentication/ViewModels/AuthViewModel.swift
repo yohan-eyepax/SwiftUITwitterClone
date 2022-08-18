@@ -12,6 +12,8 @@ class AuthViewModel : ObservableObject{
     @Published var userSession: Firebase.User?
     @Published var didAuthenticateUser = false
     @Published var currentUser: User?
+    @Published var isLoading = false
+    @Published var error: String?
     private var tempUserSession: FirebaseAuth.User?
     
     private let service = UserService()
@@ -22,27 +24,39 @@ class AuthViewModel : ObservableObject{
     }
     
     func login(withEmail email: String, password: String){
+        self.isLoading = true
+        
         Auth.auth().signIn(withEmail: email, password: password){ result, error in
             if let error = error{
                 print("DEBUG: Failed to signin with error \(error.localizedDescription)")
+                self.error = error.localizedDescription
+                self.isLoading = false
                 return
             }
             
-            guard let user = result?.user else {return}
+            guard let user = result?.user else {
+                self.isLoading = false
+                return
+                
+            }
             self.userSession = user
             self.fetchUser()
+            self.isLoading = false
         }
     }
     
     func register(withEmail email: String, password: String, fullName: String, username: String){
-        print("DEBUG: Register with email \(email)")
+        self.isLoading = true
         Auth.auth().createUser(withEmail: email, password: password){ result, error in
             if let error = error{
                 print("DEBUG: Failed to register with error \(error.localizedDescription)")
+                self.isLoading = false
                 return
             }
             
-            guard let user = result?.user else {return}
+            guard let user = result?.user else {
+                self.isLoading = false
+                return}
             self.tempUserSession = user
             
             let data = ["email": email,
@@ -55,7 +69,9 @@ class AuthViewModel : ObservableObject{
                 .document(user.uid)
                 .setData(data) { _ in
                     self.didAuthenticateUser = true
-                } 
+                    self.isLoading = false
+                }
+            
         }
     }
     
@@ -67,7 +83,10 @@ class AuthViewModel : ObservableObject{
     }
     
     func uploadProfileImage(_ image: UIImage){
-        guard let uid = tempUserSession?.uid else {return}
+        self.isLoading = true
+        guard let uid = tempUserSession?.uid else {
+            self.isLoading = false
+            return}
         
         ImageUploader.uploadImage(image: image) { profileImageUrl in
             Firestore.firestore().collection("users")
@@ -75,15 +94,20 @@ class AuthViewModel : ObservableObject{
                 .updateData(["profileImageUrl": profileImageUrl]) { _ in
                     self.userSession = self.tempUserSession
                     self.fetchUser()
+                    self.isLoading = false
                 }
         }
     }
     
     func fetchUser(){
-        guard let uid = self.userSession?.uid else {return}
+        self.isLoading = true
+        guard let uid = self.userSession?.uid else {
+            self.isLoading = false
+            return}
         
         service.fetchUser(withUid: uid) { user in
             self.currentUser = user
+            self.isLoading = false
         }
     }
 }

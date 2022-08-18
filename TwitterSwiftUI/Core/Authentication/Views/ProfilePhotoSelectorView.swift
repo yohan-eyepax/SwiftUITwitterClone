@@ -54,6 +54,11 @@ struct ProfilePhotoSelectorView: View {
             Spacer()
         }
         .ignoresSafeArea()
+        .overlay {
+            if viewModel.isLoading{
+                ActivityIndicator()
+            }
+        }
     }
     
     func loadImage() {

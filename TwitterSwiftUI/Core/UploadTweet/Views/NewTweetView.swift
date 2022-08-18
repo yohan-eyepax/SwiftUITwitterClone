@@ -58,6 +58,11 @@ struct NewTweetView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
+        .overlay {
+            if viewModel.isLoading{
+                ActivityIndicator()
+            }
+        }
     }
 }
 

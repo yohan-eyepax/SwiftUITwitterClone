@@ -77,6 +77,11 @@ struct LoginView: View {
             .padding(.bottom, 32)
         }
         .ignoresSafeArea()
+        .overlay {
+            if viewModel.isLoading{
+                ActivityIndicator()
+            }
+        }
     }
 }
 

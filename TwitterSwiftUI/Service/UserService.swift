@@ -17,8 +17,6 @@ struct UserService{
                 
                 guard let user = try? snapshot.data(as: User.self) else {return}
                 
-                print("DEBUG: User data is \(user.username)")
-                print("DEBUG: Email is \(user.email)")
                 completion(user)
             }
     }
